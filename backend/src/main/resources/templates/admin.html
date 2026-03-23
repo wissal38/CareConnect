@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - CareConnect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <main style="padding: 120px 20px 40px; max-width:1100px; margin: 0 auto;">
+        <h1>Tableau de bord administrateur</h1>
+        <p>Bienvenue, administrateur. Utilisez le menu ci-dessous pour gérer le site.</p>
+        <div style="display:flex; gap:12px; margin-top:18px;">
+            <a href="/admin/users" class="btn btn-secondary">Gérer les utilisateurs</a>
+            <a href="/admin/publications" class="btn btn-secondary">Gérer les publications</a>
+        </div>
+
+        <section style="margin-top:30px;">
+            <h3>Statistiques</h3>
+            <div style="display:flex; gap:20px;">
+                <div style="padding:12px; border:1px solid #eee; border-radius:8px;">
+                    <div style="font-weight:700; font-size:20px;" th:text="${usersCount}">0</div>
+                    <div>Utilisateurs</div>
+                </div>
+                <div style="padding:12px; border:1px solid #eee; border-radius:8px;">
+                    <div style="font-weight:700; font-size:20px;" th:text="${publicationsCount}">0</div>
+                    <div>Publications</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script th:src="@{/js/header.js}"></script>
+    <div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

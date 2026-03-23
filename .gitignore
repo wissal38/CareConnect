@@ -1,0 +1,23 @@
+# Fichiers de configuration sensibles
+**/src/main/resources/application-secret.properties
+**/src/main/resources/application-*.properties
+
+# Fichiers compilés
+target/
+bin/
+
+# Fichiers d'IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.project
+.classpath
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers de logs
+*.log

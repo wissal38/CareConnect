@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareConnect - Transformez la bienveillance en actions concrètes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/components.css}" />
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #10b981;
+            --accent-color: #FF6584;
+            --text-color: #2D3748;
+            --light-gray: #F7FAFC;
+            --medium-gray: #E2E8F0;
+            --dark-gray: #4A5568;
+            --white: #FFFFFF;
+            --black: #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        body > .cta {
+            flex: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            padding: 15px 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--primary-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 150px 0 80px;
+            color: var(--white);
+        }
+
+        .hero-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 600px;
+        }
+
+        .hero-tag {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+
+        .hero-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .hero-image img:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            padding: 60px 50px;
+            background: var(--white);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: #eff6ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        /* How it works */
+        .how-it-works {
+            padding: 80px 50px;
+            background: var(--light-gray);
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--dark-gray);
+            margin-bottom: 60px;
+            font-size: 16px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--white);
+            font-size: 32px;
+        }
+
+        .feature h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .feature p {
+            font-size: 13px;
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 60px 50px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .cta h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 120px 20px 60px;
+                text-align: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 40px;
+                padding: 40px 20px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero-buttons, .cta-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a202c;
+            color: #e2e8f0;
+            padding: 60px 0 30px;
+            font-size: 14px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-logo i {
+            background: var(--primary-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-about p {
+            margin: 15px 0;
+            line-height: 1.6;
+            color: #a0aec0;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: #a0aec0;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-links h3 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-links h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s, padding-left 0.3s;
+            display: block;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer-contact p {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            color: #a0aec0;
+        }
+
+        .footer-contact i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            margin-top: 4px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid #2d3748;
+            color: #a0aec0;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="fragments/header :: header"></div>
+
+    
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="hero-tag">Plateforme de solidarité moderne</div>
+                <h1>Transformez la bienveillance en actions concrètes</h1>
+                <p>CareConnect facilite l'entraide locale. Proposez ou demandez de l'aide, connectez-vous avec votre voisinage et créez un réseau de soutien autour de vous.</p>
+                <div class="hero-buttons">
+                    <a href="/connexion" class="btn btn-primary">Commencer maintenant</a>
+                    <a href="#features" class="btn btn-secondary">Explorer les aides</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop" alt="Community help 1">
+                <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=400&h=300&fit=crop" alt="Community help 2">
+                <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=300&fit=crop" alt="Community help 3">
+                <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=300&fit=crop" alt="Community help 4">
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Publications / Offers for Visitors -->
+    <section class="container" style="padding: 40px 0;">
+        <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 12px;">Dernières offres / demandes</h2>
+        <p style="color: #6b7280; margin-bottom: 20px;">Consultez les annonces récentes publiées par la communauté.</p>
+        <div class="publication-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
+            <div class="card" th:each="publication : ${publications}" style="background: #fff; padding: 16px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+                <h3 th:text="${publication.title}">Titre</h3>
+                <p style="color: #6b7280; margin: 8px 0;" th:text="${publication.description != null ? (publication.description.length() > 100 ? publication.description.substring(0,100) + '...' : publication.description) : ''}">Description</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px;">
+                    <a th:href="@{/demandes}" class="btn btn-secondary" style="padding:8px 10px; border-radius:8px;">Voir</a>
+                    <span style="font-size: 12px; color: #94a3b8;" th:text="${publication.location}">Lieu</span>
+                </div>
+                <div style="margin-top:8px; font-size:12px; color:#64748b;">
+                    <span th:text="${publication.user != null ? (publication.user.firstName + ' ' + publication.user.lastName) : (publication.user != null ? publication.user.username : 'Anonyme')}">Auteur</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat-item">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number">2,847</div>
+            <div class="stat-label">Membres actifs</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">
+                <i class="fas fa-hands-helping"></i>
+            </div>
+            <div class="stat-number">1,234</div>
+            <div class="stat-label">Entraides réalisées</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">
+                <i class="fas fa-smile"></i>
+            </div>
+            <div class="stat-number">89%</div>
+            <div class="stat-label">Taux de satisfaction</div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>Comment ça marche ?</h2>
+            <p class="subtitle">Une plateforme simple et intuitive pour encourager l'entraide locale</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Recherche intelligente</h3>
+                    <p>Trouvez facilement l'aide dont vous avez besoin ou proposez vos compétences</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Actions solidaires</h3>
+                    <p>Participez à des actions d'entraide dans votre quartier</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Badges & Gamification</h3>
+                    <p>Gagnez des badges en aidant votre communauté</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Communauté locale</h3>
+                    <p>Créez des liens avec les membres de votre quartier</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Rejoignez la communauté CareConnect</h2>
+            <p>Ensemble, créons un réseau plus solidaire, une action à la fois.</p>
+            <div class="cta-buttons">
+                <a href="/connexion" class="btn btn-primary">Cr&eacute;er un compte</a>
+                <a href="#impact" class="btn btn-secondary">Voir l'impact collectif</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const nav = document.querySelector('nav ul');
+            nav.classList.toggle('active');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add active class to current nav item
+        const sections = document.querySelectorAll('section');
+        const navItems = document.querySelectorAll('nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === `#${current}`) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+    <script th:src="@{/js/header.js}"></script>
+    <script>
+        if (window.updateHeaderAndGreeting) window.updateHeaderAndGreeting();
+    </script>
+</body>
+</html>

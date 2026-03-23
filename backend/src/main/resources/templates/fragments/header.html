@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- Header fragment used across pages -->
+<div th:fragment="header">
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <div class="navbar-left">
+                <a href="/" class="navbar-brand">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span>CareConnect</span>
+                </a>
+            </div>
+
+            <div class="navbar-center">
+                <button class="navbar-toggler" id="navbarToggler" aria-label="Open menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <nav class="navbar-expand-lg" id="navbarMenu">
+                    <!-- Default (public) menu -->
+                    <ul class="navbar-nav" th:unless="${isAdmin}">
+                        <li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/demandes">Communauté</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/recherche">Rechercher</a></li>
+                    </ul>
+                    <!-- Admin-only menu: dashboard + management links -->
+                    <ul class="navbar-nav" th:if="${isAdmin}">
+                        <li class="nav-item"><a class="nav-link" href="/admin/users">Gérer utilisateurs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/admin/publications">Gérer publications</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/admin">Dashboard</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="navbar-right">
+                <!-- Search Icon - optional: can add search box toggle -->
+                <button class="btn btn-sm btn-outline-light" id="searchToggler" aria-label="Search" title="Recherche">
+                    <i class="fas fa-search"></i>
+                </button>
+
+                <!-- User area: show name + dropdown if authenticated, otherwise Connect -->
+                <div class="user-area">
+                    <a id="headerUserLink" th:href="${user != null ? '/compte' : '/connexion'}" class="nav-link" th:text="${userFullName != null ? userFullName : (user != null ? (user.firstName + ' ' + user.lastName) : 'Se connecter')}">Se connecter</a>
+
+                    <div class="user-dropdown" th:if="${user != null}">
+                        <button id="userDropdownToggle" class="btn btn-sm" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <div class="user-dropdown-menu" aria-hidden="true">
+                            <a href="/compte" class="dropdown-item">Mon compte</a>
+                            <a href="/profile/settings" class="dropdown-item">Paramètres</a>
+                            <a href="#" id="serverLogoutLink" class="dropdown-item logout" style="display:block;">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CareConnect - Rechercher une aide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        body > .container {
+            flex: 1;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 12px 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        nav {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #64748b;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #1e293b;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Search Bar */
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 10px 10px 36px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .btn-search {
+            padding: 10px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-search:hover {
+            background: #2563eb;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 6px 14px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .filter-btn.active {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        /* Tags */
+        .tags-section {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #475569;
+        }
+
+        /* Help Cards */
+        .help-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .help-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 16px;
+            position: relative;
+        }
+
+        .help-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .help-icon.blue { background: #dbeafe; }
+        .help-icon.green { background: #d1fae5; }
+        .help-icon.red { background: #fee2e2; }
+        .help-icon.purple { background: #e9d5ff; }
+        .help-icon.teal { background: #ccfbf1; }
+
+        .help-content {
+            flex: 1;
+        }
+
+        .help-header {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.termine {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .help-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .help-description {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .help-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .meta-item i {
+            font-size: 12px;
+        }
+
+        .help-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .help-card {
+                flex-direction: column;
+            }
+
+            .help-actions {
+                flex-direction: row;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="fragments/header :: header"></div>
+    <script th:src="@{/js/header.js}"></script>
+    
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/components.css}" />
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Rechercher une aide</h1>
+            <p>Trouvez ou proposez des offres d'entraide près de chez vous</p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Rechercher une aide...">
+                </div>
+                <button class="btn-search">
+                    <i class="fas fa-sliders-h"></i>
+                    Filtrer
+                </button>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="toggleFilter(this)">
+                    <i class="fas fa-th"></i> Tous
+                </button>
+                <button class="filter-btn" onclick="toggleFilter(this)">
+                    <i class="fas fa-clock"></i> En cours
+                </button>
+                <button class="filter-btn" onclick="toggleFilter(this)">
+                    <i class="fas fa-exclamation-circle"></i> Urgent
+                </button>
+                <button class="filter-btn" onclick="toggleFilter(this)">
+                    <i class="fas fa-check-circle"></i> Disponible
+                </button>
+                <button class="filter-btn" onclick="toggleFilter(this)">
+                    <i class="fas fa-map-marker-alt"></i> Près de moi
+                </button>
+                <button class="filter-btn" onclick="toggleFilter(this)">
+                    <i class="fas fa-star"></i> Recommandés
+                </button>
+            </div>
+        </div>
+
+        <!-- Active Tags -->
+        <div class="tags-section">
+            <span class="tag">📍 Tous (5)</span>
+            <span class="tag">🔄 En cours (2)</span>
+            <span class="tag">🎯 Urgent (1)</span>
+        </div>
+
+        <!-- Help Cards List -->
+        <div class="help-list">
+            <!-- Parcourir les publications saisies dans le model (visiteurs / non connectés) -->
+            <div class="help-card" th:each="publication : ${publications}">
+                <div class="help-icon blue">📌</div>
+                <div class="help-content">
+                    <div class="help-header">
+                        <span th:if="${publication.status != null}" class="badge" th:classappend="${publication.status.code == 'OPEN'} ? 'ouvert' : ${publication.status.code == 'IN_PROGRESS'} ? 'en-cours' : 'termine'" th:text="${publication.status.libelle}">Status</span>
+                        <span style="font-size: 12px; color: #94a3b8;" th:text="${publication.createdAt}">Date</span>
+                    </div>
+                    <h3 class="help-title" th:text="${publication.title}">Titre</h3>
+                    <p class="help-description" th:text="${publication.description != null ? (publication.description.length() > 150 ? publication.description.substring(0,150) + '...' : publication.description) : ''}">Description</p>
+                    <div class="help-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i> <span th:text="${publication.location}">Lieu</span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-user"></i> <span th:text="${publication.user != null ? publication.user.firstName + ' ' + publication.user.lastName : 'Anonyme'}">Auteur</span>
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-comment"></i> 0 intéressés
+                        </span>
+                    </div>
+                </div>
+                <div class="help-actions">
+                    <a th:href="@{'/demandes'}" class="btn-action btn-primary">Voir</a>
+                </div>
+            </div>
+                        <span class="meta-item">
+                            <i class="fas fa-user"></i> Alex R.
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-comment"></i> 3 intéressés
+                        </span>
+                    </div>
+                </div>
+                <div class="help-actions">
+                    <button class="btn-action btn-primary" onclick="showInterest('soutien')">Proposer mon aide</button>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="help-card">
+                <div class="help-icon teal">🌱</div>
+                <div class="help-content">
+                    <div class="help-header">
+                        <span class="badge ouvert">Ouvert</span>
+                        <span style="font-size: 12px; color: #94a3b8;">2 jours</span>
+                    </div>
+                    <h3 class="help-title">Propose petit bricolage</h3>
+                    <p class="help-description">Jardinier de père en fils, je peux aider pour équipages, montage meubles, etc.</p>
+                    <div class="help-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i> Bordeaux, 33000
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-user"></i> Pierre L.
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-comment"></i> 2 En attente
+                        </span>
+                    </div>
+                </div>
+                <div class="help-actions">
+                    <button class="btn-action btn-success" onclick="showInterest('bricolage')">Contacter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Annonces</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Urgents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Bénévoles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Offres</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    //<![CDATA[
+        function toggleFilter(btn) {
+            // Remove active class from all buttons if not "Tous"
+            if (!btn.textContent.includes('Tous')) {
+                const allBtn = document.querySelector('.filter-btn');
+                allBtn.classList.remove('active');
+            }
+            
+            btn.classList.toggle('active');
+            
+            // If clicking "Tous", remove active from others
+            if (btn.textContent.includes('Tous')) {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    if (b !== btn) b.classList.remove('active');
+                });
+            }
+        }
+
+        function showInterest(type) {
+            alert(`✅ Votre intérêt pour "${type}" a été enregistré!\n\nLe demandeur sera notifié de votre proposition d'aide.`);
+        }
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.help-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.help-title').textContent.toLowerCase();
+                const description = card.querySelector('.help-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    //]]>
+    </script>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

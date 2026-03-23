@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Gérer les utilisateurs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <main class="container" style="padding: 120px 20px 40px; max-width:1100px; margin: 0 auto;">
+        <h1>Gérer les utilisateurs</h1>
+        <div class="card" style="padding:16px;">
+            <table class="table" style="margin-top:18px;">
+            <thead>
+                <tr style="text-align:left;">
+                    <th>ID</th><th>Email</th><th>Nom</th><th>Rôles</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="u : ${users}" th:id="|userRow-${u.id}|">
+                    <td th:text="${u.id}">1</td>
+                    <td th:text="${u.email}">user@example.com</td>
+                    <td th:text="${u.firstName} + ' ' + u.lastName">Nom</td>
+                    <td>
+                        <span th:each="role, iterStat : ${u.roles}">
+                            <span th:text="${role.name}"></span>
+                            <span th:if="${!iterStat.last}">, </span>
+                        </span>
+                        <span th:if="${!u.active}" class="text-muted" style="margin-left: 8px;">(Bloqué)</span>
+                    </td>
+                    <td>
+                        <a th:if="${u.active}" href="#" class="btn btn-sm btn-primary" th:onclick="|blockUser(${u.id}); return false;|">Bloquer</a>
+                        <a th:if="${!u.active}" href="#" class="btn btn-sm btn-secondary" th:onclick="|unblockUser(${u.id}); return false;|">Débloquer</a>
+                        <a href="#" class="btn btn-sm" style="color:#ef4444; margin-left:8px;" th:onclick="|deleteUser(${u.id}); return false;|" th:attr="data-user-id=${u.id}">Supprimer</a>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script th:src="@{/js/header.js}"></script>
+    <script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

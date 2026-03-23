@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareConnect - Profil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/components.css}" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        body > main {
+            flex: 1;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e72 100%);
+            padding: 16px 40px;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(132, 146, 236);
+            font-size: 16px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        /* Hero Section */
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #5a67d8 100%);
+            padding: 40px;
+            border-bottom: 2px solid #4c51bf;
+        }
+        
+        
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .hero-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-avatar {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .user-info h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-hero {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-hero.primary {
+            background: white;
+            color: #ff6b6b;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+        }
+
+        .btn-hero.secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .stat-item {
+            padding: 20px;
+            text-align: center;
+            border-right: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-item:hover {
+            background: #f8fafc;
+            transform: translateY(-2px);
+        }
+
+        .stat-item.active {
+            border-bottom: 3px solid #00d2d3;
+        }
+
+        .stat-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #64748b;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .stat-sublabel {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .btn-voir-plus {
+            background: #00d2d3;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 210, 211, 0.3);
+        }
+
+        .btn-voir-plus:hover {
+            background: #00b8ba;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 210, 211, 0.4);
+        }
+
+        /* Opportunity Cards */
+        .opportunity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .opportunity-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .opportunity-card:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .opportunity-left {
+            flex: 1;
+        }
+
+        .opportunity-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .opportunity-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .badge-small {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-urgent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .opportunity-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #94a3b8;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-proposer {
+            background: linear-gradient(135deg, #ff8e72 0%, #ff6b9d 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-proposer:hover {
+            background: linear-gradient(135deg, #ff7a5c 0%, #ff5a8a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-proposer:active {
+            transform: translateY(0);
+        }
+
+        /* Activity Cards */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .activity-card:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .activity-icon.purple {
+            background: #ede9fe;
+        }
+
+        .activity-icon.blue {
+            background: #dbeafe;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .activity-subtitle {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .activity-arrow {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        /* Three Column Layout */
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .column-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .column-card:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+
+        .column-header {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+
+        /* Activity Stats */
+        .activity-stat {
+            margin-bottom: 12px;
+        }
+
+        .activity-stat-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        .activity-stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .btn-download {
+            width: 100%;
+            padding: 10px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-download:hover {
+            background: #2563eb;
+        }
+
+        .btn-download-alt {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+        }
+
+        .btn-download-alt:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        /* Progress Bar */
+        .progress-item {
+            margin-bottom: 16px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .progress-label {
+            color: #64748b;
+        }
+
+        .progress-percentage {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2d3 0%, #ff6b9d 100%);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .progress-note {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* Tips Section */
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tip-item {
+            display: flex;
+            gap: 10px;
+            padding: 12px;
+            background: #fffbeb;
+            border-radius: 8px;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .tip-icon {
+            font-size: 18px;
+        }
+
+        .tip-content {
+            flex: 1;
+        }
+
+        .tip-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .tip-description {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Health Card */
+        .health-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .health-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .health-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .health-subtitle {
+            font-size: 13px;
+            color: #78716c;
+            margin-bottom: 20px;
+        }
+
+        .btn-health {
+            background: #f59e0b;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-health:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 968px) {
+            .hero-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .hero-left {
+                flex-direction: column;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .three-column {
+                grid-template-columns: 1fr;
+            }
+
+            .opportunity-card {
+                flex-direction: column;
+            }
+
+            nav {
+                display: none;
+            }
+        }
+    </style>
+    <!-- Minimal fallback so onclick handlers don't fail if the page is truncated
+         due to server-side errors (prevents ReferenceError while diagnosing). -->
+    <script>
+        function showAddForm() {
+            try {
+                const modal = document.getElementById('addFormModal');
+                if (!modal) return;
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+                const today = new Date().toISOString().split('T')[0];
+                const now = new Date(); now.setHours(now.getHours() + 1);
+                const dateEl = document.getElementById('date'); if (dateEl) dateEl.value = today;
+                const heureEl = document.getElementById('heure'); if (heureEl) heureEl.value = now.toTimeString().substring(0,5);
+                const pubId = document.getElementById('pubId'); if (pubId) pubId.value = '';
+            } catch (e) {
+                console.debug('fallback showAddForm error', e);
+            }
+        }
+
+        function hideAddForm() {
+            try {
+                const modal = document.getElementById('addFormModal');
+                if (!modal) return;
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+                const form = document.getElementById('annonceForm'); if (form) form.reset();
+            } catch (e) {
+                console.debug('fallback hideAddForm error', e);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+    <script th:src="@{/js/header.js}"></script>
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-left">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    <h1>Bonjour  <span id="userFullName" th:text="${userFullName != null ? userFullName : (user != null ? (user.firstName + ' ' + user.lastName) : 'Visiteur')}">Jean Dupont</span> ! 👋</h1>
+                    <p class="user-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="userCity" th:text="${user != null ? user.city : 'Tunis, 1001'}">Paris, 75015</span>
+                        <!--<span> • Membre depuis février 2024</span>-->
+                    </p>
+                </div>
+            </div>
+            <div class="hero-actions">
+            </div>
+
+            <!-- Modal pour l'ajout d'une offre/demande -->
+            <div id="addFormModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                    <span class="close" onclick="hideAddForm()">&times;</span>
+                    <h2>Nouvelle Annonce</h2>
+                    <form id="annonceForm" onsubmit="return submitAnnonce(event)">
+                        <input type="hidden" id="pubId" name="pubId" value="" />
+                        <div class="form-group">
+                            <label for="type">Type *</label>
+                            <select id="type" name="type" required>
+                                <option value="">Sélectionner un type</option>
+                                <option value="offre">Offre</option>
+                                <option value="demande">Demande</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="titre">Titre *</label>
+                            <input type="text" id="titre" name="titre" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lieu">Lieu *</label>
+                            <input type="text" id="lieu" name="lieu" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="date">Date *</label>
+                                <input type="date" id="date" name="date" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="heure">Heure *</label>
+                                <input type="time" id="heure" name="heure" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" onclick="hideAddForm()">Annuler</button>
+                            <button id="annonceSubmitBtn" type="submit" class="btn-submit">Publier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item active">
+                <div class="stat-icon">📊</div>
+                <div class="stat-number">24</div>
+                <div class="stat-label">Vue d'ensemble</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">🤝</div>
+                <div class="stat-number">320</div>
+                <div class="stat-label">Actions effectuées</div>
+                <div class="stat-sublabel">+24 cette semaine</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-number">8</div>
+                <div class="stat-label">Badges</div>
+                <div class="stat-sublabel">Niveau 3 / 5</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-number">42%</div>
+                <div class="stat-label">Score impact</div>
+                <div class="stat-sublabel">Objectif 100</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- User Publications (Mes annonces) -->
+        <section class="section" th:if="${userPublications != null}">
+            <div class="section-header">
+                <h2 class="section-title">Mes annonces <span th:text="${userPublicationsCount}"></span></h2>
+                <button class="btn-voir-plus" onclick="showAddForm()">Ajouter</button>
+            </div>
+            <div class="opportunity-list">
+                <div th:if="${#lists.isEmpty(userPublications)}">Vous n'avez pas encore d'annonces. Cliquez sur <strong>Ajouter</strong> pour publier la première.</div>
+                <div th:each="pub : ${userPublications}" class="opportunity-card" th:attr="data-pub-id=${pub.id}">
+                    <div class="opportunity-left">
+                        <div class="opportunity-header">
+                            <h3 class="opportunity-title" th:text="${pub.title}">Titre de l'annonce</h3>
+                            <span class="badge-small badge-urgent" th:if="${pub.estDisponible}">Disponible</span>
+                            <span class="badge-small" th:if="${!pub.estDisponible}">Terminée</span>
+                        </div>
+                        <div class="opportunity-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-map-marker-alt"></i> <span th:text="${pub.location}">Lieu</span>
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-clock"></i> <span th:text="${pub.createdAt}">date</span>
+                            </span>
+                        </div>
+                        <p th:text="${pub.description}">Description de l'annonce...</p>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
+                        <button class="btn-proposer" th:onclick="|window.location.href='/publication/' + ${pub.id}|">Voir</button>
+                        <button class="btn-proposer" style="background:#f59e0b;" th:onclick="|showEditForm(${pub.id})|">Modifier</button>
+                        <button class="btn-proposer" style="background:#ef4444;" th:onclick="|deletePublication(${pub.id})|">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Publications Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Toutes les publications</h2>
+            </div>
+            <div id="allPublicationsList" class="opportunity-list">
+                <!-- Chargé via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Notifications Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-bell" style="margin-right: 8px; color: #ff6b6b;"></i>
+                    Propositions d'aide reçues
+                    <span id="notificationBadge" class="badge-notification" style="display: none;"></span>
+                </h2>
+            </div>
+            <div id="notificationsContainer" class="opportunity-list">
+                <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                    <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <p>Aucune proposition d'aide pour le moment</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activities Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Suggestions intelligentes</h2>
+            </div>
+            <div class="activity-list">
+                <div class="activity-card" onclick="openActivity('match')">
+                    <div class="activity-icon purple">🎯</div>
+                    <div class="activity-content">
+                        <div class="activity-title">3 nouveaux matchs parfaits pour vous</div>
+                        <div class="activity-subtitle">Basé sur votre profil et vos compétences</div>
+                    </div>
+                    <i class="fas fa-chevron-right activity-arrow"></i>
+                </div>
+
+                <div class="activity-card" onclick="openActivity('formation')">
+                    <div class="activity-icon blue">📚</div>
+                    <div class="activity-content">
+                        <div class="activity-title">2 formations disponibles</div>
+                        <div class="activity-subtitle">Améliorez vos compétences</div>
+                    </div>
+                    <i class="fas fa-chevron-right activity-arrow"></i>
+                </div>
+
+                <div class="activity-card" onclick="openActivity('evenements')">
+                    <div class="activity-icon purple">📅</div>
+                    <div class="activity-content">
+                        <div class="activity-title">2 évènements à venir</div>
+                        <div class="activity-subtitle">Dans votre quartier</div>
+                    </div>
+                    <i class="fas fa-chevron-right activity-arrow"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Three Column Section -->
+        <div class="three-column">
+            <!-- Activity Stats -->
+            <div class="column-card">
+                <h3 class="column-header">Activité récente</h3>
+                <div class="activity-stat">
+                    <div class="activity-stat-label">Aides effectuées ce mois</div>
+                    <div class="activity-stat-number">12</div>
+                </div>
+                <div class="activity-stat" style="margin-top: 16px;">
+                    <div class="activity-stat-label">Taux de réussite</div>
+                    <div class="activity-stat-number">95%</div>
+                </div>
+                <div class="activity-stat" style="margin-top: 16px;">
+                    <div class="activity-stat-label">Temps total d'aide</div>
+                    <div class="activity-stat-number">38h</div>
+                </div>
+            </div>
+
+            <!-- Progress Tracking -->
+            <div class="column-card">
+                <h3 class="column-header">Objectif hebdomadaire</h3>
+                
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Progression</span>
+                        <span class="progress-percentage">75%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Accompagnement rendez-vous</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%;"></div>
+                    </div>
+                    <div class="progress-note">3 sur 5 complétés</div>
+                </div>
+
+                <div class="tips-list" style="margin-top: 20px;">
+                    <div class="tip-item">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-content">
+                            <div class="tip-title">Astuce du jour</div>
+                            <div class="tip-description">Complétez votre profil pour recevoir des suggestions personnalisées</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Card -->
+            <div class="column-card health-card">
+                <div class="health-icon">🏥</div>
+                <h3 class="health-title">Prochaine tâche</h3>
+                <p class="health-subtitle">Accompagner Marie pour son rendez-vous médical demain à 14h</p>
+                <button class="btn-health" onclick="viewTask()">Voir les détails</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Styles pour le modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: auto;
+        }
+
+        .modal.active {
+            display: flex !important;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin: auto;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="time"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn-cancel,
+        .btn-submit {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-cancel:hover {
+            background-color: #eaeaea;
+        }
+
+        .btn-submit {
+            background-color: #00d2d3;
+            color: white;
+            border: none;
+        }
+
+        .btn-submit:hover {
+            background-color: #00b8ba;
+            box-shadow: 0 4px 12px rgba(0, 210, 211, 0.4);
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .badge-notification {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .notification-item {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+            border-left: 4px solid #ff6b6b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .notification-item:hover {
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
+            transform: translateX(4px);
+        }
+
+        .notification-item.unread {
+            background: linear-gradient(135deg, #fff8f5 0%, #ffedd5 100%);
+            border-left-color: #ff8e72;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .notification-action {
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .btn-notification {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-mark-read {
+            background: #00d2d3;
+            color: white;
+        }
+
+        .btn-mark-read:hover {
+            background: #00b8ba;
+        }
+    </style>
+
+    <script>
+        function proposeHelp(type) {
+            alert(`✅ Votre proposition d'aide pour "${type}" a été envoyée!\n\nLe demandeur sera notifié de votre disponibilité.`);
+        }
+
+        function openActivity(type) {
+            alert(`📱 Ouverture de la section "${type}"...`);
+        }
+
+        function download(format) {
+            alert(`📥 Téléchargement du rapport en format ${format.toUpperCase()}...`);
+        }
+
+        function viewTask() {
+            alert('📋 Détails de la tâche:\n\nRendez-vous médical\nBénéficiaire: Marie L.\nHeure: Demain à 14h\nLieu: Hôpital Charles Nicolle\nAdresse: Rue Ibn Khaldoun, Tunis 1006, Tunisie');
+        }
+
+        // Animate stats on load
+        window.addEventListener('load', function() {
+            const statItems = document.querySelectorAll('.stat-item');
+            statItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.3s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Populate user data from /api/users/me using JWT in localStorage or cookie fallback
+        async function populateUserFromApi() {
+            // Immediate cached data fallback for snappy UI
+            try {
+                const cached = localStorage.getItem('user');
+                if (cached) {
+                    const obj = JSON.parse(cached);
+                    const nameEl = document.getElementById('userFullName');
+                    const cityEl = document.getElementById('userCity');
+                    const fullName = ((obj.firstName || '') + ' ' + (obj.lastName || '')).trim() || obj.username;
+                    if (nameEl && fullName) nameEl.textContent = fullName;
+                    if (cityEl && obj.city) cityEl.textContent = obj.city;
+                    const headerLink = document.getElementById('headerUserLink');
+                    if (headerLink) {
+                        headerLink.textContent = fullName || 'Mon compte';
+                        headerLink.href = '/compte';
+                    }
+                }
+            } catch (e) {
+                // ignore cache parsing issues
+            }
+
+            const token = localStorage.getItem('accessToken') || localStorage.getItem('token') || null;
+            // Try to fetch with Authorization header first (preferred), then fallback to credentials-only fetch (cookie)
+            const tryFetch = async (options) => {
+                try {
+                    const res = await fetch('/api/users/me', options);
+                    if (!res.ok) return null;
+                    const user = await res.json();
+                    // update DOM
+                    const nameEl = document.getElementById('userFullName');
+                    const cityEl = document.getElementById('userCity');
+                    const headerLink = document.getElementById('headerUserLink');
+                    const fullname = ((user.firstName || '') + ' ' + (user.lastName || '')).trim() || user.username || 'Mon compte';
+                    if (nameEl) nameEl.textContent = fullname;
+                    if (cityEl) cityEl.textContent = user.city || cityEl.textContent;
+                    if (headerLink) { headerLink.textContent = fullname; headerLink.href = '/compte'; }
+                    // cache user
+                    try { localStorage.setItem('user', JSON.stringify(user)); } catch (e) { }
+                    return user;
+                } catch (err) {
+                    return null;
+                }
+            }
+
+            // Priority 1: token in localStorage -> Authorization header
+            if (token) {
+                const r = await tryFetch({ headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+                if (r) return;
+            }
+
+            // Fallback: no token or token didn't work -> rely on cookie (same-origin credentials)
+            await tryFetch({ credentials: 'include' });
+                // If we don't have server-side publications rendered, try to fetch user publications client-side
+                try {
+                    const cached = localStorage.getItem('user');
+                        if (cached) {
+                            const usr = JSON.parse(cached);
+                            // Prefer dedicated /api/publications/me endpoint to fetch the current user's publications
+                            fetchAndRenderUserPublications(usr, true);
+                    } else {
+                        // Try to fetch /api/users/me to get ID
+                        const meRes = await fetch('/api/users/me', { credentials: 'include' });
+                        if (meRes.ok) {
+                            const meUser = await meRes.json();
+                            try { localStorage.setItem('user', JSON.stringify(meUser)); } catch (e) { }
+                            fetchAndRenderUserPublications(meUser, true);
+                        }
+                    }
+                } catch (e) { console.debug('fetch user publications fallback failed', e); }
+        }
+        async function fetchAndRenderUserPublications(user) {
+            if (!user || !user.id) return;
+            const wrapper = document.getElementById('userPublicationsList');
+            if (!wrapper) return;
+            try {
+                const token = localStorage.getItem('accessToken');
+                let res;
+                // Prefer /api/publications/me which does not need an ID and is secured
+                if (token) {
+                    res = await fetch(`/api/publications/me`, { headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+                } else {
+                    // fallback to public user list if /me is unavailable (e.g., not authenticated)
+                    res = await fetch(`/api/publications/user/${user.id}`, { credentials: 'include' });
+                }
+                if (!res.ok) return;
+                const pubs = await res.json();
+                // If there are no publications, leave existing message if present
+                if (!pubs || pubs.length === 0) return;
+                // Clear wrapper first
+                wrapper.innerHTML = '';
+                pubs.forEach(pub => {
+                    const card = document.createElement('div');
+                    card.className = 'opportunity-card';
+
+                    // Left content
+                    const left = document.createElement('div');
+                    left.className = 'opportunity-left';
+                    left.innerHTML = `
+                        <div class="opportunity-header">
+                            <h3 class="opportunity-title">${escapeHtml(pub.title || 'Sans titre')}</h3>
+                            <span class="badge-small ${pub.estDisponible ? 'badge-urgent' : ''}">${pub.estDisponible ? 'Disponible' : 'Terminée'}</span>
+                        </div>
+                        <div class="opportunity-meta">
+                            <span class="meta-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(pub.location || '')}</span>
+                            <span class="meta-item"><i class="fas fa-clock"></i> ${new Date(pub.createdAt).toLocaleString()}</span>
+                        </div>
+                        <p>${escapeHtml(pub.description || '')}</p>
+                    `;
+
+                    // Actions container
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.style.display = 'flex';
+                    actionsDiv.style.flexDirection = 'column';
+                    actionsDiv.style.gap = '10px';
+                    actionsDiv.style.alignItems = 'flex-end';
+
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'btn-proposer';
+                    viewBtn.textContent = 'Voir';
+                    viewBtn.addEventListener('click', () => { window.location.href = '/publication/' + pub.id; });
+                    actionsDiv.appendChild(viewBtn);
+
+                    if (user && pub.user && pub.user.id === user.id) {
+                        const editBtn = document.createElement('button');
+                        editBtn.className = 'btn-proposer';
+                        editBtn.style.background = '#f59e0b';
+                        editBtn.textContent = 'Modifier';
+                        editBtn.addEventListener('click', () => showEditForm(pub.id));
+                        actionsDiv.appendChild(editBtn);
+
+                        const delBtn = document.createElement('button');
+                        delBtn.className = 'btn-proposer';
+                        delBtn.style.background = '#ef4444';
+                        delBtn.textContent = 'Supprimer';
+                        delBtn.addEventListener('click', () => deletePublication(pub.id));
+                        actionsDiv.appendChild(delBtn);
+                    }
+
+                    card.appendChild(left);
+                    card.appendChild(actionsDiv);
+                    wrapper.appendChild(card);
+                });
+            } catch (err) {
+                console.debug('Could not fetch user publications', err);
+            }
+        }
+
+        function escapeHtml(unsafe) {
+            return (unsafe || '')
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#039;');
+        }
+
+        document.addEventListener('DOMContentLoaded', populateUserFromApi);
+
+        // Load all publications
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('/api/publications', { credentials: 'include' });
+                if (response.ok) {
+                    const publications = await response.json();
+                    const wrapper = document.getElementById('allPublicationsList');
+                    if (wrapper) {
+                        wrapper.innerHTML = '';
+                        if (!publications || publications.length === 0) {
+                            wrapper.innerHTML = '<div>Aucune publication disponible pour le moment.</div>';
+                            return;
+                        }
+                        publications.forEach(pub => {
+                            const card = document.createElement('div');
+                            card.className = 'opportunity-card';
+
+                            const left = document.createElement('div');
+                            left.className = 'opportunity-left';
+                            left.innerHTML = `
+                                <div class="opportunity-header">
+                                    <h3 class="opportunity-title">${escapeHtml(pub.title || 'Sans titre')}</h3>
+                                    <span class="badge-small ${pub.estDisponible ? 'badge-urgent' : ''}">${pub.estDisponible ? 'Disponible' : 'Terminée'}</span>
+                                </div>
+                                <div class="opportunity-meta">
+                                    <span class="meta-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(pub.location || '')}</span>
+                                    <span class="meta-item"><i class="fas fa-user"></i> ${pub.user && pub.user.firstName ? pub.user.firstName + ' ' + (pub.user.lastName || '') : 'Anonyme'}</span>
+                                    <span class="meta-item"><i class="fas fa-clock"></i> ${new Date(pub.createdAt).toLocaleString()}</span>
+                                </div>
+                                <p>${escapeHtml(pub.description || '')}</p>
+                            `;
+
+                            const actionsDiv = document.createElement('div');
+                            actionsDiv.style.display = 'flex';
+                            actionsDiv.style.flexDirection = 'column';
+                            actionsDiv.style.gap = '10px';
+                            actionsDiv.style.alignItems = 'flex-end';
+
+                            const viewBtn = document.createElement('button');
+                            viewBtn.className = 'btn-proposer';
+                            viewBtn.textContent = 'Voir';
+                            viewBtn.addEventListener('click', () => { window.location.href = '/publication/' + pub.id; });
+                            actionsDiv.appendChild(viewBtn);
+
+                            const helpBtn = document.createElement('button');
+                            helpBtn.className = 'btn-proposer';
+                            helpBtn.style.background = '#00d2d3';
+                            helpBtn.textContent = 'Proposer mon aide';
+                            helpBtn.addEventListener('click', () => proposeHelpForPublication(pub.id, pub.title || 'cette publication'));
+                            actionsDiv.appendChild(helpBtn);
+
+                            card.appendChild(left);
+                            card.appendChild(actionsDiv);
+                            wrapper.appendChild(card);
+                        });
+                    }
+                }
+            } catch (err) {
+                console.debug('Could not fetch all publications', err);
+            }
+        });
+        document.querySelectorAll('.stat-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.stat-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Afficher le formulaire
+        function showAddForm() {
+            const modal = document.getElementById('addFormModal');
+            if (!modal) return;
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+            // Définir la date d'aujourd'hui par défaut
+            const today = new Date().toISOString().split('T')[0];
+            const dateEl = document.getElementById('date');
+            if (dateEl) dateEl.value = today;
+            // Définir l'heure actuelle + 1 heure par défaut
+            const now = new Date();
+            now.setHours(now.getHours() + 1);
+            const heureEl = document.getElementById('heure');
+            if (heureEl) heureEl.value = now.toTimeString().substring(0, 5);
+            // Ensure the form is in create mode
+            const pubId = document.getElementById('pubId');
+            if (pubId) pubId.value = '';
+            const submitBtn = document.getElementById('annonceSubmitBtn');
+            if (submitBtn) submitBtn.textContent = 'Publier';
+            const titreEl = document.getElementById('titre');
+            if (titreEl) titreEl.value = '';
+            const descEl = document.getElementById('description');
+            if (descEl) descEl.value = '';
+            const lieuEl = document.getElementById('lieu');
+            if (lieuEl) lieuEl.value = '';
+            const typeEl = document.getElementById('type');
+            if (typeEl) typeEl.value = '';
+        }
+
+        // Cacher le formulaire
+        function hideAddForm() {
+            const modal = document.getElementById('addFormModal');
+            if (!modal) return;
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+            const form = document.getElementById('annonceForm');
+            if (form) form.reset();
+        }
+
+        // Soumission du formulaire
+        async function submitAnnonce(event) {
+            event.preventDefault();
+            
+            // Récupérer les valeurs du formulaire
+            const formData = {
+                type: document.getElementById('type').value,
+                titre: document.getElementById('titre').value,
+                description: document.getElementById('description').value,
+                lieu: document.getElementById('lieu').value,
+                date: document.getElementById('date').value,
+                heure: document.getElementById('heure').value
+            };
+
+            // Ici, vous pouvez ajouter le code pour envoyer les données au serveur
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                alert('Vous devez être connecté pour poster une annonce.');
+                return;
+            }
+            // If editing, call PUT /api/publications/{id}, otherwise POST
+            const pubId = document.getElementById('pubId').value;
+            const url = pubId ? `/api/publications/${pubId}` : '/api/publications';
+            const method = pubId ? 'PUT' : 'POST';
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        title: formData.titre,
+                        description: formData.description,
+                        location: formData.lieu,
+                        estDisponible: true
+                    })
+                });
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || 'Erreur lors de la requête');
+                }
+                const data = await res.json();
+                console.log('Publication saved :', data);
+                alert('Votre annonce a été enregistrée avec succès !');
+                hideAddForm();
+                // Update DOM if needed
+                refreshUserPublicationsListAfterSave(data);
+            } catch (err) {
+                console.error(err);
+                alert('Erreur lors de la création/modification de l\'annonce: ' + err.message);
+            }
+            
+            // Empêcher la soumission du formulaire par défaut
+            return false;
+        }
+
+        // Fermer le modal si on clique en dehors
+        window.onclick = function(event) {
+            const modal = document.getElementById('addFormModal');
+            if (event.target === modal) {
+                hideAddForm();
+            }
+        }
+
+        // Show edit form for specific publication - populate modal with existing values
+        async function showEditForm(pubId) {
+                    // Open modal
+                    const modal = document.getElementById('addFormModal');
+                    if (!modal) return;
+                    modal.classList.add('active');
+                    modal.style.display = 'flex';
+                    // Try to fetch publication by id
+                    try {
+                        const token = localStorage.getItem('accessToken');
+                        let res;
+                        if (token) {
+                            res = await fetch(`/api/publications/${pubId}`, { headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+                        } else {
+                            res = await fetch(`/api/publications/${pubId}`, { credentials: 'include' });
+                        }
+                        if (!res.ok) { alert('Impossible de récupérer l\'annonce pour modification'); return; }
+                        const pub = await res.json();
+                        document.getElementById('pubId').value = pub.id;
+                        document.getElementById('titre').value = pub.title || '';
+                        document.getElementById('description').value = pub.description || '';
+                        document.getElementById('lieu').value = pub.location || '';
+                        // Attempt to set type if present
+                        if (pub.type && pub.type.code) {
+                            const typeEl = document.getElementById('type'); if (typeEl) typeEl.value = pub.type.code;
+                        }
+                        const submitBtn = document.getElementById('annonceSubmitBtn');
+                        if (submitBtn) submitBtn.textContent = 'Modifier';
+                    } catch (err) {
+                        console.error('showEditForm error', err);
+                        alert('Erreur lors du chargement de l\'annonce');
+                    }
+                }
+
+        // Delete publication
+        async function deletePublication(pubId) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) return;
+            try {
+                const token = localStorage.getItem('accessToken');
+                const res = await fetch(`/api/publications/${pubId}`, {
+                    method: 'DELETE',
+                    headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+                    credentials: 'include'
+                });
+                if (res.status === 204 || res.ok) {
+                    alert('Annonce supprimée');
+                    // remove card from DOM
+                    const el = document.querySelector(`.opportunity-card[data-pub-id='${pubId}']`);
+                    if (el && el.parentNode) el.parentNode.removeChild(el);
+                } else {
+                    const txt = await res.text();
+                    alert('Erreur lors de la suppression: ' + (txt || res.status));
+                }
+            } catch (err) {
+                console.error('deletePublication err', err);
+                alert('Erreur réseau lors de la suppression');
+            }
+        }
+
+        // Update or refresh a saved/edited publication in the UI
+        function refreshUserPublicationsListAfterSave(pub) {
+            try {
+                const wrapper = document.getElementById('userPublicationsList');
+                if (!wrapper) return;
+                // Try to find existing card
+                const existing = document.querySelector(`.opportunity-card[data-pub-id='${pub.id}']`);
+                // Build content using DOM to avoid inline onclick with ${...}
+                const buildCard = () => {
+                    const card = document.createElement('div');
+                    card.className = 'opportunity-card';
+                    card.setAttribute('data-pub-id', pub.id);
+
+                    const left = document.createElement('div');
+                    left.className = 'opportunity-left';
+                    left.innerHTML = `
+                        <div class="opportunity-header">
+                            <h3 class="opportunity-title">${escapeHtml(pub.title || 'Sans titre')}</h3>
+                            <span class="badge-small ${pub.estDisponible ? 'badge-urgent' : ''}">${pub.estDisponible ? 'Disponible' : 'Terminée'}</span>
+                        </div>
+                        <div class="opportunity-meta">
+                            <span class="meta-item"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(pub.location || '')}</span>
+                            <span class="meta-item"><i class="fas fa-clock"></i> ${new Date(pub.createdAt).toLocaleString()}</span>
+                        </div>
+                        <p>${escapeHtml(pub.description || '')}</p>
+                    `;
+
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.style.display = 'flex';
+                    actionsDiv.style.flexDirection = 'column';
+                    actionsDiv.style.gap = '10px';
+                    actionsDiv.style.alignItems = 'flex-end';
+
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'btn-proposer';
+                    viewBtn.textContent = 'Voir';
+                    viewBtn.addEventListener('click', () => { window.location.href = '/publication/' + pub.id; });
+                    actionsDiv.appendChild(viewBtn);
+
+                    const editBtn = document.createElement('button');
+                    editBtn.className = 'btn-proposer';
+                    editBtn.style.background = '#f59e0b';
+                    editBtn.textContent = 'Modifier';
+                    editBtn.addEventListener('click', () => showEditForm(pub.id));
+                    actionsDiv.appendChild(editBtn);
+
+                    const delBtn = document.createElement('button');
+                    delBtn.className = 'btn-proposer';
+                    delBtn.style.background = '#ef4444';
+                    delBtn.textContent = 'Supprimer';
+                    delBtn.addEventListener('click', () => deletePublication(pub.id));
+                    actionsDiv.appendChild(delBtn);
+
+                    card.appendChild(left);
+                    card.appendChild(actionsDiv);
+                    return card;
+                };
+
+                        if (existing) {
+                const newCard = buildCard();
+                existing.replaceWith(newCard);
+            } else {
+                const card = buildCard();
+                const wrapper = document.getElementById('userPublicationsList');
+                if (wrapper) wrapper.insertAdjacentElement('afterbegin', card);
+            }
+        } catch (e) { console.debug('refresh error', e); }
+    }
+
+        // Propose help for a publication
+        async function proposeHelpForPublication(pubId, pubTitle) {
+            try {
+                const token = localStorage.getItem('accessToken');
+                if (!token) {
+                    alert('Vous devez être connecté pour proposer votre aide.');
+                    return;
+                }
+
+                const response = await fetch(`/api/publications/${pubId}/propose-help`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    alert('✅ Votre proposition d\'aide a été envoyée avec succès !\n\nLe demandeur et l\'admin ont été notifiés.');
+                } else if (response.status === 400) {
+                    const error = await response.json();
+                    alert('⚠️ ' + (error.error || 'Erreur lors de la proposition'));
+                } else {
+                    alert('❌ Erreur lors de l\'envoi de votre proposition.');
+                }
+            } catch (err) {
+                console.error('Error proposing help:', err);
+                alert('❌ Erreur réseau lors de la proposition');
+            }
+        }
+
+                // Load notifications
+        async function loadNotifications() {
+            try {
+                const token = localStorage.getItem('accessToken');
+                if (!token) return;
+
+                const response = await fetch('/api/notifications/type/HELP_PROPOSED', {
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    credentials: 'include'
+                });
+
+                if (!response.ok) return;
+
+                const notifications = await response.json();
+                const container = document.getElementById('notificationsContainer');
+                const badge = document.getElementById('notificationBadge');
+
+                if (!notifications || notifications.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 30px; color: #94a3b8;"><i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px;"></i><p>Aucune proposition d\'aide pour le moment</p></div>';
+                    badge.style.display = 'none';
+                    return;
+                }
+
+                const unreadCount = notifications.filter(n => !n.read).length;
+                if (unreadCount > 0) {
+                    badge.textContent = unreadCount;
+                    badge.style.display = 'inline-block';
+                }
+
+                container.innerHTML = '';
+                notifications.forEach(notif => {
+                    const notifEl = document.createElement('div');
+                    notifEl.className = 'notification-item' + (notif.read ? '' : ' unread');
+                    const createdDate = new Date(notif.createdAt);
+                    const timeAgo = getTimeAgo(createdDate);
+
+                    // Build content and actions separately to avoid nested template literals
+                    const content = `
+                        <div class="notification-content">
+                            <div class="notification-title">
+                                <i class="fas fa-lightbulb" style="color: #ff6b6b; margin-right: 6px;"></i>
+                                ${escapeHtml(notif.title || 'Nouvelle proposition')}
+                            </div>
+                            <div class="notification-message">
+                                ${escapeHtml(notif.message || '')}
+                            </div>
+                            <div class="notification-time">
+                                <i class="fas fa-clock"></i> ${timeAgo}
+                            </div>
+                        </div>
+                                `;
+                    let actionHtml = '';
+                    if (!notif.read) {
+                        actionHtml = '<div class="notification-action">'
+                            + '<button class="btn-notification btn-mark-read" onclick="markNotificationAsRead(' + notif.id + ')">'
+                            + 'Marquer comme lu'
+                            + '</button>'
+                            + '</div>';
+                    }
+                    notifEl.innerHTML = content + actionHtml;
+                    container.appendChild(notifEl);
+                });
+            } catch (err) {
+                console.debug('Could not load notifications', err);
+            }
+        }
+
+        // Helper function to format time ago
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            const intervals = {
+                'an': 31536000,
+                'mois': 2592000,
+                'semaine': 604800,
+                'jour': 86400,
+                'heure': 3600,
+                'minute': 60
+            };
+
+            for (let [key, value] of Object.entries(intervals)) {
+                const interval = Math.floor(seconds / value);
+                if (interval >= 1) {
+                    return 'il y a ' + interval + ' ' + key + (interval > 1 ? 's' : '');
+                }
+            }
+            return 'à l\'instant';
+        }
+
+        // Mark notification as read
+        async function markNotificationAsRead(notifId) {
+            try {
+                const token = localStorage.getItem('accessToken');
+                if (!token) return;
+
+                const response = await fetch(`/api/notifications/${notifId}/read`, {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    credentials: 'include'
+                        });
+
+                if (response.ok) {
+                    loadNotifications();
+                }
+            } catch (err) {
+                console.debug('Error marking notification as read', err);
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('addFormModal');
+            if (event.target === modal) {
+                hideAddForm();
+            }
+        }
+
+        // Load notifications when page loads
+        window.addEventListener('load', loadNotifications);
+        // Refresh notifications every 30 seconds
+        setInterval(loadNotifications, 30000);
+    </script>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

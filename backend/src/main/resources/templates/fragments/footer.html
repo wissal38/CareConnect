@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!-- Footer fragment used across pages -->
+<div th:fragment="footer">
+    <footer class="footer">
+        <div class="container">
+            <div style="display:flex; justify-content:space-between; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+                <div style="max-width:380px;">
+                    <a href="/" class="navbar-brand" style="display:flex; align-items:center; gap:10px; color:var(--lighter-color);">
+                        <i class="fas fa-hand-holding-heart" style="color:var(--primary-color);"></i>
+                        <span style="font-weight:700; color:white;">CareConnect</span>
+                    </a>
+                    <p style="color:rgba(255,255,255,0.8); margin-top:12px;">
+                        CareConnect favorise l'entraide locale en mettant en relation voisins et
+                        bénévoles pour des actions de proximité.
+                    </p>
+                </div>
+                <div style="display:flex; gap:40px;">
+                    <div>
+                        <h5 style="color:white;">Liens</h5>
+                        <ul class="footer-links">
+                            <li><a href="/">Accueil</a></li>
+                            <li><a href="/demandes">Communauté</a></li>
+                            <li><a href="/connexion">Connexion</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 style="color:white;">Contact</h5>
+                        <ul class="footer-links">
+                            <li>10 Avenue Habib Bourguiba, Tunis</li>
+                            <li>contact@careconnect.tn</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom" style="margin-top:32px; text-align:center;">
+                &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> CareConnect. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+</div>

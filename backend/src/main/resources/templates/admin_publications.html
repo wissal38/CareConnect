@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Gérer les publications</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <main class="container" style="padding: 120px 20px 40px; max-width:1100px; margin: 0 auto;">
+        <h1>Gérer les publications</h1>
+        <div class="card" style="padding:16px;">
+            <table class="table" style="margin-top:18px;">
+            <thead>
+                <tr style="text-align:left;">
+                    <th>ID</th><th>Titre</th><th>Auteur</th><th>Lieu</th><th>Disponible</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${publications}" th:id="|publicationRow-${p.id}|">
+                    <td th:text="${p.id}">1</td>
+                    <td th:text="${p.title}">Titre</td>
+                    <td th:text="${p.user != null ? (p.user.firstName + ' ' + p.user.lastName) : 'Anonyme'}">Auteur</td>
+                    <td th:text="${p.location}">Lieu</td>
+                    <td th:text="${p.estDisponible}">true</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-primary">Editer</a>
+                        <a href="#" class="btn btn-sm" style="color:#ef4444; margin-left:8px;" th:onclick="|deletePublication(${p.id}); return false;|" data-publication-id="${p.id}">Supprimer</a>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script th:src="@{/js/header.js}"></script>
+    <script th:src="@{/js/admin.js}"></script>
+</body>
+</html>
